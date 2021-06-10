@@ -5,15 +5,15 @@ using DE = ShareMarket.TradeLog.DataEntities;
 
 namespace ShareMarket.TradeLog.EntityMapper
 {
-    public class MarketMappingProfile : Profile
+    public class TradeStatusMappingProfile : Profile
     {
-        public MarketMappingProfile()
+        public TradeStatusMappingProfile()
         {
-            CreateMap<BE.Market,DE.Market>()
+            CreateMap<BE.TradeStatus,DE.TradeStatus>()
                 .ForMember(dest => dest.CreatedDate , am => am.Ignore())
                 .ForMember(dest => dest.ModifiedDate , am => am.Ignore());
 
-            CreateMap<DE.Market,BE.Market>();
+            CreateMap<DE.TradeStatus,BE.TradeStatus>();
         }
     }
 }
