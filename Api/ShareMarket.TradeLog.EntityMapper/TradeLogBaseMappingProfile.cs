@@ -2,7 +2,8 @@
 
 namespace ShareMarket.TradeLog.EntityMapper
 {
-    public class Class1
+    public class TradeLogBaseMappingProfile
     {
+        
     }
 }

@@ -1,5 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <ItemGroup>
+    <ProjectReference Include="..\ShareMarket.TradeLog.BusinessEntities\ShareMarket.TradeLog.BusinessEntities.csproj" />
+    <ProjectReference Include="..\ShareMarket.TradeLog.BusinessRules\ShareMarket.TradeLog.BusinessRules.csproj" />
+    <ProjectReference Include="..\ShareMarket.TradeLog.DataEntities\ShareMarket.TradeLog.DataEntities.csproj" />
+    <ProjectReference Include="..\ShareMarket.TradeLog.DataRepository\ShareMarket.TradeLog.DataRepository.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>

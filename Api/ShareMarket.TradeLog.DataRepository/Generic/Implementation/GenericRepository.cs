@@ -15,7 +15,7 @@ namespace ShareMarket.TradeLog.DataRepository.Generic.Implementation
             DbContext = tradeLogDbContext;
         }
 
-        public IQueryable<TModel> GetAll()
+        public IQueryable<TModel> Get()
         {
             return DbContext.Set<TModel>().AsNoTracking();
         }
@@ -42,6 +42,11 @@ namespace ShareMarket.TradeLog.DataRepository.Generic.Implementation
         {
             DbContext.Set<TModel>().Remove(entity);
             DbContext.SaveChanges();
+        }
+
+        public bool IsExists(Expression<Func<TModel, bool>> expression)
+        {
+            return DbContext.Set<TModel>().Any(expression);
         }
     }
 }
