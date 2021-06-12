@@ -6,7 +6,7 @@ using ShareMarket.TradeLog.DataRepository.Generic.Interface;
 
 namespace ShareMarket.TradeLog.DataRepository.Generic.Implementation
 {
-    public class GenericRepository<TModel, TModelPrimaryKey> : IGenericRepository<TModel, TModelPrimaryKey> where TModel : class where TModelPrimaryKey : struct
+    public class GenericRepository<TModel> : IGenericRepository<TModel> where TModel : class
     {
         protected TradeLogDbContext DbContext {get;set;}
 

@@ -4,7 +4,7 @@ using ShareMarket.TradeLog.DataRepository.Interface;
 
 namespace ShareMarket.TradeLog.DataRepository.Implementation
 {
-    public class CloseTradeRepository : GenericRepository<CloseTrade, long>, ICloseTradeRepository
+    public class CloseTradeRepository : GenericRepository<CloseTrade>, ICloseTradeRepository
     {
         public CloseTradeRepository(TradeLogDbContext tradeLogDbContext) : base(tradeLogDbContext)  {   }
     }

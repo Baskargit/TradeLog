@@ -3,7 +3,7 @@ using ShareMarket.TradeLog.DataRepository.Generic.Interface;
 
 namespace ShareMarket.TradeLog.DataRepository.Interface
 {
-    public interface IOpenTradeRepository : IGenericRepository<OpenTrade,long>
+    public interface IOpenTradeRepository : IGenericRepository<OpenTrade>
     {
         
     }

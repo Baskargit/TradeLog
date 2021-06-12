@@ -4,7 +4,7 @@ using ShareMarket.TradeLog.DataRepository.Interface;
 
 namespace ShareMarket.TradeLog.DataRepository.Implementation
 {
-    public class TradeStatusRepository : GenericRepository<TradeStatus, int>, ITradeStatusRepository
+    public class TradeStatusRepository : GenericRepository<TradeStatus>, ITradeStatusRepository
     {
         public TradeStatusRepository(TradeLogDbContext tradeLogDbContext) : base(tradeLogDbContext)  {   }
     }

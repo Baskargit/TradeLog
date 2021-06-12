@@ -4,7 +4,7 @@ using ShareMarket.TradeLog.DataRepository.Interface;
 
 namespace ShareMarket.TradeLog.DataRepository.Implementation
 {
-    public class SymbolRepository : GenericRepository<Symbol, int>, ISymbolRepository
+    public class SymbolRepository : GenericRepository<Symbol>, ISymbolRepository
     {
         public SymbolRepository(TradeLogDbContext tradeLogDbContext) : base(tradeLogDbContext)  {   }
     }

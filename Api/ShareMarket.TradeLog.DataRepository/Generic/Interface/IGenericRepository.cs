@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace ShareMarket.TradeLog.DataRepository.Generic.Interface
 {
-    public interface IGenericRepository<TModel,TModelPrimaryKey> where TModel : class where TModelPrimaryKey : struct
+    public interface IGenericRepository<TModel> where TModel : class
     {
         IQueryable<TModel> Get();
         IQueryable<TModel> GetWith(Expression<Func<TModel,bool>> expression);

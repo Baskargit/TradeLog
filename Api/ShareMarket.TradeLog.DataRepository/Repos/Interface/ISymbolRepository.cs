@@ -3,7 +3,7 @@ using ShareMarket.TradeLog.DataRepository.Generic.Interface;
 
 namespace ShareMarket.TradeLog.DataRepository.Interface
 {
-    public interface ISymbolRepository : IGenericRepository<Symbol,int>
+    public interface ISymbolRepository : IGenericRepository<Symbol>
     {
         
     }
