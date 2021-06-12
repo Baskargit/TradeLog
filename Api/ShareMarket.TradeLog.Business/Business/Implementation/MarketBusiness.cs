@@ -79,10 +79,10 @@ namespace ShareMarket.TradeLog.Business.Implementation
         {
             var biz = new Biz<Market>();
 
-            var dataEntity = _mapper.Map<BE.Market,DE.Market>(entity);
+            var dataEntity = _marketRepository.Get().FirstOrDefault(x => x.Id == entity.Id);
 
             // Validation
-            var validator = new MarketValidator((int)DbOperation.CREATE);
+            var validator = new MarketValidator((int)DbOperation.CREATE,(dataEntity != null) ? true : false);
             var validationResult = validator.Validate(new BE.Market());
             if(!validationResult.IsValid) {
                 validationResult.Errors.ToList().ForEach(error => 
@@ -91,6 +91,7 @@ namespace ShareMarket.TradeLog.Business.Implementation
                 return biz;
             }
 
+            _mapper.Map<BE.Market,DE.Market>(entity,dataEntity);
             _marketRepository.Update(dataEntity);
 
             biz.Data = _mapper.Map<DE.Market,BE.Market>(dataEntity);

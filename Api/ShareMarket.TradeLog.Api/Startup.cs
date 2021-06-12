@@ -69,11 +69,25 @@ namespace ShareMarket.TradeLog.Api
             );
 
             // Business DI Services
+            services.AddTransient<ICloseTradeBusiness,CloseTradeBusiness>();
             services.AddTransient<IMarketBusiness,MarketBusiness>();
+            services.AddTransient<IOpenTradeBusiness,OpenTradeBusiness>();
+            services.AddTransient<ISymbolBusiness,SymbolBusiness>();
+            services.AddTransient<ISymbolTypeBusiness,SymbolTypeBusiness>();
+            services.AddTransient<ITradeResultBusiness,TradeResultBusiness>();
+            services.AddTransient<ITradeStatusBusiness,TradeStatusBusiness>();
+            services.AddTransient<ITradeTypeBusiness,TradeTypeBusiness>();
             
 
             // Repository Data DI Services
+            services.AddTransient<ICloseTradeRepository,CloseTradeRepository>();
             services.AddTransient<IMarketRepository,MarketRepository>();
+            services.AddTransient<IOpenTradeRepository,OpenTradeRepository>();
+            services.AddTransient<ISymbolRepository,SymbolRepository>();
+            services.AddTransient<ISymbolTypeRepository,SymbolTypeRepository>();
+            services.AddTransient<ITradeResultRepository,TradeResultRepository>();
+            services.AddTransient<ITradeStatusRepository,TradeStatusRepository>();
+            services.AddTransient<ITradeTypeRepository,TradeTypeRepository>();
 
             
             // Mapper DI Service
