@@ -1,0 +1,6 @@
+sidebar
+https://bootstrapious.com/p/bootstrap-sidebar
+
+Avoid html code duplication
+https://css-tricks.com/the-simplest-ways-to-handle-html-includes/
+
