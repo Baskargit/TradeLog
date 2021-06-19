@@ -61,7 +61,7 @@ $(document).on("click",".editRow", function ()
 
     // Get symbol object from the symbols variable
     var promise = getSymbolById(id);
-    promise.done(data => 
+    promise.done(symbol => 
     {
         // Bind viewModel data to view
         var elementToBind = document.getElementById(symbolModelId);
@@ -69,12 +69,12 @@ $(document).on("click",".editRow", function ()
         if (existingContext && ko.isObservable(existingContext.$rawData)) 
         {
             // update observable with new view model
-            existingContext.$rawData(data);
+            existingContext.$rawData(symbol);
         } 
         else 
         {
             // initialize with observable view model
-            ko.applyBindings(ko.observable(data), elementToBind);
+            ko.applyBindings(ko.observable(symbol), elementToBind);
         }
     });
  });
@@ -112,33 +112,22 @@ function loadSymbolsUi()
     .then(response => {
         return response.text()
     })
-    .then(data => {
-        // Set table template
+    .then(data => 
+    {
+        // assign symbol template
         document.querySelector(dynamicpagecontentKey).innerHTML = data;
 
         // Fetch symbols and Update UI
         var promise = getSymbols();
-        promise.done(data => {
-            UpdateDataGrid(data);
+        promise.done(symbols => {
+            UpdateDataGrid(symbols);
         });
-
     });
 
-    // Fetch symbol model
-    fetch(symbolModelTemplatePath)
-    .then(response => 
-    {
-        return response.text()
-    })
-    .then(data => 
-    {
-        document.querySelector(dataModelKey).innerHTML = data;
-    });
 }
 
 // Assign constants
-var symbolTemplatePath = "templates/symbol/symbol.html";
-var symbolModelTemplatePath = "templates/symbol/symbolModel.html";
+var symbolTemplatePath = "templates/symbol/symbol.template.html";
 var symbolsApiEndpoint = "Symbol";
 var dataGrid = {};
 var symbolModelId = "symbolModal";

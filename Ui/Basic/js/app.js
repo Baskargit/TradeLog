@@ -59,6 +59,5 @@ function remove(url)
 
 var host = "http://localhost:5000/";
 var dynamicpagecontentKey = "dynamicpagecontent";
-var dataModelKey = "dataModel";
 
 loadHeader();
