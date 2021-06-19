@@ -63,25 +63,20 @@ $(document).on("click",".editRow", function ()
     var promise = getSymbolById(id);
     promise.done(data => 
     {
-        // Set pop-up modal content
-        //document.querySelector(dataModelKey).innerHTML = symbolModel;
-
-        if (viewModel == null) {
-            viewModel = ko.mapping.fromJS(data);
+        // Bind viewModel data to view
+        var elementToBind = document.getElementById(symbolModelId);
+        var existingContext = ko.contextFor(elementToBind);
+        if (existingContext && ko.isObservable(existingContext.$rawData)) 
+        {
+            // update observable with new view model
+            existingContext.$rawData(data);
+        } 
+        else 
+        {
+            // initialize with observable view model
+            ko.applyBindings(ko.observable(data), elementToBind);
         }
-
-        // Popup-Modal with all symbol info
-        //viewModel.name(data.name);
-        ko.mapping.fromJS(data, viewModel);
-        console.log(data);
-        console.log(JSON.stringify(data));
-
-
-        // If save requested, call edit endpoint and reload the grid 
     });
-
-    
-       
  });
 
  $(document).on("click",".deleteRow", function () 
@@ -102,12 +97,13 @@ $(document).on("click",".editRow", function ()
     getSymbols();
  });
 
- function Symbol()
+ $(document).on("click",".closeModal", function () 
  {
-    this.name = ko.observable('name');
-    this.code = ko.observable('code');
-    this.price = ko.observable('price');
- }
+    //ko.cleanNode(document.getElementById(symbolModelId));
+    //$("#" + symbolModelId).remove();
+    //console.log("removed item");
+});
+
 
 function loadSymbolsUi() 
 {
@@ -136,35 +132,16 @@ function loadSymbolsUi()
     })
     .then(data => 
     {
-        symbolModel = data;
-        
-        // Set pop-up modal content
-        document.querySelector(dataModelKey).innerHTML = symbolModel;
-
-        // viewModel = {
-        //     name : ko.observable('name'),
-        //     code : ko.observable('code'),
-        //     price : ko.observable('price')
-        // };
-
-        //viewModel = ko.mapping.fromJS(symbol);
+        document.querySelector(dataModelKey).innerHTML = data;
     });
 }
-
 
 // Assign constants
 var symbolTemplatePath = "templates/symbol/symbol.html";
 var symbolModelTemplatePath = "templates/symbol/symbolModel.html";
 var symbolsApiEndpoint = "Symbol";
 var dataGrid = {};
-var symbolModel = null;
-var isModelBindingDone = false;
-var viewModel = null;
-var symbol = {
-    name : '',
-    code : '',
-    price : 0
-}
+var symbolModelId = "symbolModal";
 
 loadSymbolsUi();
 

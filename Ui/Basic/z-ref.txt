@@ -4,3 +4,5 @@ https://bootstrapious.com/p/bootstrap-sidebar
 Avoid html code duplication
 https://css-tricks.com/the-simplest-ways-to-handle-html-includes/
 
+Ways to remove bindings from knockout.js
+https://stackoverflow.com/questions/22297612/removing-bindings-in-knockout-js
