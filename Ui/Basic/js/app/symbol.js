@@ -58,7 +58,7 @@ function UpdateDataGrid(symbols)
     if (symbols != null) 
     {
         // Initialize table
-        dataGrid = $('#symbol_table').DataTable({
+        dataTable = $('#symbol_table').DataTable({
             "columns": [
                 {"data": "s.no",
                     render: function (data, type, row, meta) 
@@ -73,10 +73,9 @@ function UpdateDataGrid(symbols)
                     "data": null,
                     "sortable": false,
                     "mRender": function(data, type, full) {
-                        var editElement = '<button data-toggle="modal" data-target="#symbolModal" class="editRow btn btn-info btn-sm mr-1" data-id="' + data.id + '">Edit</button>';
+                        var editElement = '<button data-toggle="modal" data-target="#symbolModal" class="editRow btn btn-info btn-sm mr-1" data-id="' + data.id + '">Info</button>';
                         var deleteElement = '<button class="deleteRow btn btn-info btn-sm mr-1" data-id="' + data.id + '">Delete</button>';
-                        var infoElement = '<button class="infoRow btn btn-info btn-sm mr-1" data-id="' + data.id + '">Info</button>';
-                        return editElement + deleteElement + infoElement;
+                        return editElement + deleteElement;
                     },
                     
                 },
@@ -88,8 +87,8 @@ function UpdateDataGrid(symbols)
             "pageLength": 25
         });
         
-        dataGrid.rows.add(symbols);
-        dataGrid.draw();    
+        dataTable.rows.add(symbols);
+        dataTable.draw();    
     }
 }
 
@@ -109,19 +108,27 @@ $(document).on("click",".editRow", function ()
     });
  });
 
- $(document).on("click",".deleteRow", function () 
+$(document).on("click",".deleteRow", function () 
 {
     // Get id from the clicked item
     var id = $(this).attr('data-id');
 
-    getSymbols();
- });
+    var parentRow = getParentRowById(id);
+    var parentRowData = dataTable.row($(parentRow)).data();
 
- $(document).on("click",".infoRow", function () 
-{
-    // Get id from the click item
-    var id = $(this).attr('data-id');
-    
+    createDeletePrompt('Confirmation','Are you sure want to delete <strong>' + parentRowData.name + '</strong> ?',() => 
+    { 
+        var promise = removeSymbol(id);
+        promise.done(result => 
+        {
+            dataTable.row(parentRow).remove().draw();
+            createNotification(parentRowData.name + " deleted successfully",NOTIFICATION_TYPE.SUCCESS);
+        })
+        .fail(result => 
+        {
+            createNotification(parentRowData.name + " deletion failed",NOTIFICATION_TYPE.ERROR);
+        });
+    },null);
 
     getSymbols();
  });
@@ -144,33 +151,28 @@ $(document).on("click","#saveModal", function ()
     {
         if (DATA_OP == DATA_OPERATION.CREATE) 
         {
-            dataGrid.row.add(x);
-            createNotification("Symbol created successfully",NOTIFICATION_TYPE.SUCCESS);
+            dataTable.row.add(x);
+            createNotification(viewData.name + " created successfully",NOTIFICATION_TYPE.SUCCESS);
         }
         else 
         {
             // Get he parent row
-            var tr = $('table tr .editRow[data-id="' + x.id + '"]');
-            if (tr.length > 0) 
-            {
-                // Update the parent row data by 'DataTable' api
-                var parentRow = tr[0].parentElement.parentElement;
-                dataGrid.row(parentRow).data(x).invalidate();
-                createNotification("Symbol updated successfully",NOTIFICATION_TYPE.SUCCESS);
-            }
+            var parentRow = getParentRowById(x.id);
+            dataTable.row(parentRow).data(x).invalidate();
+            createNotification(viewData.name + " updated successfully",NOTIFICATION_TYPE.SUCCESS);
         }
 
         // Update datatable ui
-        dataGrid.draw();
+        dataTable.draw();
     }).fail((responseObject) => 
     {
         if (DATA_OP == DATA_OPERATION.CREATE) 
         {
-            createNotification("Symbol creation failed",NOTIFICATION_TYPE.ERROR);
+            createNotification(viewData.name + " creation failed",NOTIFICATION_TYPE.ERROR);
         }
         else
         {
-            createNotification("Symbol update failed",NOTIFICATION_TYPE.ERROR);
+            createNotification(viewData.name + " update failed",NOTIFICATION_TYPE.ERROR);
         }
         console.log(responseObject);
     }).always(x => 
@@ -193,6 +195,23 @@ function GetSymbolModel(symbolObject)
             symbolTypeId:  ($.isNumeric(symbolObject.symbolTypeId)) ? parseInt(symbolObject.symbolTypeId) : 1
         }
     : null;
+}
+
+function getParentRowById(id)
+{
+    var tr = $('table tr .editRow[data-id="' + id + '"]');
+
+    if (tr.length > 0) 
+    {
+        return tr[0].parentElement.parentElement;
+    }
+
+    return null;
+}
+
+function getParentRowByS_No(id)
+{
+
 }
 
 function loadSymbolsUi() 
@@ -222,7 +241,7 @@ var DATA_OP = -1; // 'C' => Create an entity , 'U' => Update an entity
 var symbolTemplatePath = "templates/symbol/symbol.template.html";
 var symbolsApiEndpoint = "Symbol";
 var symbolModalId = "symbolModal";
-var dataGrid = {};
+var dataTable = {};
 
 loadSymbolsUi();
 

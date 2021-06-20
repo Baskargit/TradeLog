@@ -78,15 +78,8 @@ function initializeNotificationDefaults()
 
 function initializePromptDefaults()
 {
-    alertify.defaults = {
-        movable: false,
-        resizable: false,
-        notifier:{
-                delay:5,
-                position:'top-right',
-                closeButton: true
-            },
-    };
+    alertify.defaults['theme'].ok = 'ajs-ok btn btn-danger';
+    alertify.defaults['theme'].cancel = 'ajs-cancel btn btn-success';
 }
 
 // Global helper functions
@@ -136,6 +129,29 @@ function createNotification(message,type=0,title="")
         default:
             break;
     }
+}
+
+function createDeletePrompt(title,message,onOkHandler,onCancelHandler)
+{
+    var prompt = alertify.confirm();
+
+    prompt.set({
+        transition:'zoom',
+        movable: false,
+        resizable: false,
+        closable:true,
+        pinnable:false,
+        pinned:false,
+        labels: {
+            ok:'Yes', cancel:'No'
+        },
+        title: title,
+        message: message,
+        onok: onOkHandler,
+        oncancel: onCancelHandler
+    });
+
+    prompt.show();
 }
 
 // Assign constants
