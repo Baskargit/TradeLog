@@ -57,6 +57,38 @@ function remove(url)
    });
 }
 
+function initializeNotificationDefaults() 
+{
+    toastr.options = {
+        "closeButton": true,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "2000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+}
+
+function initializePromptDefaults()
+{
+    alertify.defaults = {
+        movable: false,
+        resizable: false,
+        notifier:{
+                delay:5,
+                position:'top-right',
+                closeButton: true
+            },
+    };
+}
+
 // Global helper functions
 function toggleButton(buttonSelector) 
 {
@@ -85,7 +117,33 @@ function closeModal(modalSelector)
     }
 }
 
-var host = "http://localhost:5000/";
-var dynamicpagecontentKey = "dynamicpagecontent";
+function createNotification(message,type=0,title="") 
+{
+    switch (type) 
+    {
+        case NOTIFICATION_TYPE.SUCCESS:
+            toastr.success(message, title ? title : 'Success');
+            break;
+        case NOTIFICATION_TYPE.ERROR:
+            toastr.error(message, title ? title : 'Error');
+            break;
+        case NOTIFICATION_TYPE.INFO:
+            toastr.info(message, title ? title : 'Info');
+            break;
+        case NOTIFICATION_TYPE.WARNING:
+            toastr.warning(message, title ? title : 'Warning');
+            break;
+        default:
+            break;
+    }
+}
+
+// Assign constants
+const NOTIFICATION_TYPE = Object.freeze({"SUCCESS" : 0, "ERROR" : 1, "WARNING" : 2, "INFO" : 3});
+const DATA_OPERATION = Object.freeze({ "CREATE" : 0, "READ" : 1, "UPDATE" : 2, "DELETE" : 3 });
+const host = "http://localhost:5000/";
+const dynamicpagecontentKey = "dynamicpagecontent";
 
 loadHeader();
+initializeNotificationDefaults();
+initializePromptDefaults();

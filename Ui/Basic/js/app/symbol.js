@@ -96,7 +96,7 @@ function UpdateDataGrid(symbols)
 // Data Action functions
 $(document).on("click",".editRow", function () 
 {
-    DATA_OPERATION = 'U';
+    DATA_OP = DATA_OPERATION.UPDATE;
 
     // Get id from the click item
     var id = $(this).attr('data-id');
@@ -111,7 +111,7 @@ $(document).on("click",".editRow", function ()
 
  $(document).on("click",".deleteRow", function () 
 {
-    // Get id from the click item
+    // Get id from the clicked item
     var id = $(this).attr('data-id');
 
     getSymbols();
@@ -128,7 +128,7 @@ $(document).on("click",".editRow", function ()
 
  $(document).on("click","#createNewSymbol", function () 
  {
-    DATA_OPERATION = 'C';
+    DATA_OP = DATA_OPERATION.CREATE;
     UpdateView({ id:null, name: null, code: null, price: null, symbolTypeId: null });
 });
 
@@ -136,39 +136,49 @@ $(document).on("click","#saveModal", function ()
 {
     toggleButton('#saveModal');
 
-    // Identify the action type
-    if (DATA_OPERATION)
+    // Get data
+    var viewData = GetViewData();
+
+    var promise = (DATA_OP == DATA_OPERATION.CREATE) ? createSymbol(viewData) : updateSymbol(viewData);
+    promise.done(x => 
     {
-        // Get data
-        var viewData = GetViewData();
-
-        var promise = (DATA_OPERATION == 'C') ? createSymbol(viewData) : updateSymbol(viewData);
-        promise.done(x => 
+        if (DATA_OP == DATA_OPERATION.CREATE) 
         {
-            if (DATA_OPERATION == 'C') {
-                dataGrid.row.add(x);
-            } else {
-                // Get he parent row
-                var tr = $('table tr .editRow[data-id="' + x.id + '"]');
-                if (tr.length > 0) 
-                {
-                    // Update the parent row data by 'DataTable' api
-                    var parentRow = tr[0].parentElement.parentElement;
-                    dataGrid.row(parentRow).data(x).invalidate();
-                }
-            }
-
-            // Update datatable ui
-            dataGrid.draw();
-        }).fail((responseObject) => 
+            dataGrid.row.add(x);
+            createNotification("Symbol created successfully",NOTIFICATION_TYPE.SUCCESS);
+        }
+        else 
         {
-            console.log(responseObject);
-        }).always(x => 
+            // Get he parent row
+            var tr = $('table tr .editRow[data-id="' + x.id + '"]');
+            if (tr.length > 0) 
             {
-            toggleButton('#saveModal');
-            closeModal('#' + symbolModalId);
-        });
-    }
+                // Update the parent row data by 'DataTable' api
+                var parentRow = tr[0].parentElement.parentElement;
+                dataGrid.row(parentRow).data(x).invalidate();
+                createNotification("Symbol updated successfully",NOTIFICATION_TYPE.SUCCESS);
+            }
+        }
+
+        // Update datatable ui
+        dataGrid.draw();
+    }).fail((responseObject) => 
+    {
+        if (DATA_OP == DATA_OPERATION.CREATE) 
+        {
+            createNotification("Symbol creation failed",NOTIFICATION_TYPE.ERROR);
+        }
+        else
+        {
+            createNotification("Symbol update failed",NOTIFICATION_TYPE.ERROR);
+        }
+        console.log(responseObject);
+    }).always(x => 
+    {
+        toggleButton('#saveModal');
+        closeModal('#' + symbolModalId);
+    });
+
 });
 
 // Helper functions
@@ -206,7 +216,7 @@ function loadSymbolsUi()
 }
 
 // Tracker variables
-var DATA_OPERATION = ''; // 'C' => Create an entity , 'U' => Update an entity
+var DATA_OP = -1; // 'C' => Create an entity , 'U' => Update an entity
 
 // Assign constants
 var symbolTemplatePath = "templates/symbol/symbol.template.html";
