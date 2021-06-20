@@ -57,6 +57,34 @@ function remove(url)
    });
 }
 
+// Global helper functions
+function toggleButton(buttonSelector) 
+{
+    var button = $(buttonSelector);
+
+    if (button.length > 0)
+    {
+        var attr = $(button[0]).prop('disabled');
+
+        if (typeof attr !== 'undefined' && attr !== false)
+        {
+            $(button[0]).prop('disabled',false);
+        }
+        else
+        {
+            $(button[0]).prop('disabled',true);
+        }
+    }
+}
+
+function closeModal(modalSelector)
+{
+    if ($(modalSelector).length > 0)
+    {
+        $(modalSelector).modal('hide');    
+    }
+}
+
 var host = "http://localhost:5000/";
 var dynamicpagecontentKey = "dynamicpagecontent";
 

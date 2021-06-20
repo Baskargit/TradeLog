@@ -61,7 +61,7 @@ namespace ShareMarket.TradeLog.Business.Implementation
 
             // Validation
             var validator = new SymbolValidator((int)DbOperation.CREATE);
-            var validationResult = validator.Validate(new BE.Symbol());
+            var validationResult = validator.Validate(entity);
             if(!validationResult.IsValid) {
                 validationResult.Errors.ToList().ForEach(error => 
                     biz.AddError(error.ErrorCode,error.ErrorMessage)
@@ -83,7 +83,7 @@ namespace ShareMarket.TradeLog.Business.Implementation
 
             // Validation
             var validator = new SymbolValidator((int)DbOperation.CREATE,(dataEntity != null) ? true : false);
-            var validationResult = validator.Validate(new BE.Symbol());
+            var validationResult = validator.Validate(entity);
             if(!validationResult.IsValid) {
                 validationResult.Errors.ToList().ForEach(error => 
                     biz.AddError(error.ErrorCode,error.ErrorMessage)

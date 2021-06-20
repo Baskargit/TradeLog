@@ -6,3 +6,6 @@ https://css-tricks.com/the-simplest-ways-to-handle-html-includes/
 
 Ways to remove bindings from knockout.js
 https://stackoverflow.com/questions/22297612/removing-bindings-in-knockout-js
+
+Add S.No column to jq datatable
+https://stackoverflow.com/questions/6871198/add-row-number-column-to-jquery-datatables
