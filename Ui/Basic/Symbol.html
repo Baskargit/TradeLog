@@ -48,6 +48,18 @@
                             <label for="price" class="col-form-label">Price:</label>
                             <input data-bind='textInput: price' type="number" class="form-control" id="price" placeholder="21.06">
                         </div>
+                        <div class="form-group">
+                            <label for="symbolTypeLabel" class="col-form-label">SymbolType:</label>
+                            <div id="symbolTypeLabel">
+                                <select name="symbol" id="symbolType" data-bind="
+                                    options: symbolTypes,
+                                    optionsText: 'name',
+                                    optionsValue: 'id',
+                                    value: symbolTypeId
+                                ">    
+                                </select>
+                            </div>
+                        </div>
                     </form> 
                 </div>
                 <div class="modal-footer">

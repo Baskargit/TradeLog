@@ -92,6 +92,7 @@ namespace ShareMarket.TradeLog.Business.Implementation
             }
 
             _mapper.Map<BE.Symbol,DE.Symbol>(entity,dataEntity);
+            dataEntity.Id = entity.Id;
             _symbolRepository.Update(dataEntity);
 
             biz.Data = _mapper.Map<DE.Symbol,BE.Symbol>(dataEntity);
