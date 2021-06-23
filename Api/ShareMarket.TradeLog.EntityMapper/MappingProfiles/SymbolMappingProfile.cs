@@ -10,6 +10,9 @@ namespace ShareMarket.TradeLog.EntityMapper
         public SymbolMappingProfile()
         {
             CreateMap<BE.Symbol,DE.Symbol>()
+                .ForMember(dest => dest.Id , am => am.Ignore())
+                .ForMember(dest => dest.SymbolType , am => am.Ignore())
+                .ForMember(dest => dest.OpenTrade , am => am.Ignore())
                 .ForMember(dest => dest.CreatedDate , am => am.Ignore())
                 .ForMember(dest => dest.ModifiedDate , am => am.Ignore());
 
