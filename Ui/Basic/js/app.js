@@ -1,18 +1,15 @@
 function loadHeader() 
 {
     fetch("templates/generic/header.html")
-    .then(response => {
+    .then(response => 
+    {
         return response.text()
     })
-    .then(data => {
-        document.querySelector("header").innerHTML = data;
-
-        // Attach click handler
+    .then(data => 
+    {
+        // Set Sidebar menu
         $(document).ready(function () {
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('active');
-                $(this).toggleClass('active');
-            });
+            $("header").replaceWith(data);
         });
     });
 }
@@ -160,6 +157,10 @@ const DATA_OPERATION = Object.freeze({ "CREATE" : 0, "READ" : 1, "UPDATE" : 2, "
 const host = "http://localhost:5000/";
 const dynamicpagecontentKey = "dynamicpagecontent";
 
-loadHeader();
-initializeNotificationDefaults();
-initializePromptDefaults();
+// Set scrollbar color
+$(document).ready(function () {
+    $("html").attr('class','scrollbar-type-1 sb-cyan');
+    loadHeader();
+    initializeNotificationDefaults();
+    initializePromptDefaults();
+});

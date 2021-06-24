@@ -25,6 +25,16 @@ namespace ShareMarket.TradeLog.DataRepository.Generic.Implementation
             return DbContext.Set<TModel>().Where(expression).AsNoTracking();
         }
 
+        public IQueryable<TModel> GetWithTracking()
+        {
+            return DbContext.Set<TModel>();
+        }
+
+        public IQueryable<TModel> GetWithTracking(Expression<Func<TModel, bool>> expression)
+        {
+            return DbContext.Set<TModel>().Where(expression);
+        }
+
         public void Add(TModel entity)
         {
             DbContext.Set<TModel>().Add(entity);

@@ -66,6 +66,7 @@ namespace ShareMarket.TradeLog.Api
             services.AddDbContext<TradeLogDbContext>(options => 
                 options.UseMySql(Configuration.GetConnectionString("DevelopmentDB"),
                 b => b.MigrationsAssembly("ShareMarket.TradeLog.Api"))
+                .UseLoggerFactory(LoggerFactory.Create(x => x.AddConsole()))
             );
 
             // Business DI Services

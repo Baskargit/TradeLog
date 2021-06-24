@@ -8,6 +8,8 @@ namespace ShareMarket.TradeLog.DataRepository.Generic.Interface
     {
         IQueryable<TModel> Get();
         IQueryable<TModel> GetWith(Expression<Func<TModel,bool>> expression);
+        IQueryable<TModel> GetWithTracking();
+        IQueryable<TModel> GetWithTracking(Expression<Func<TModel, bool>> expression);
         void Add(TModel entity);
         void Update(TModel entity);
         void Delete(TModel entity);

@@ -174,9 +174,9 @@ namespace ShareMarket.TradeLog.DataRepository
 
             modelBuilder.Entity<Symbol>(entity =>
             {
-                entity.HasKey(e => new { e.Id, e.SymbolTypeId })
+                entity.HasKey(e => new { e.Id })
                     .HasName("PRIMARY")
-                    .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                    .HasAnnotation("MySql:IndexPrefixLength", new[] { 0 });
 
                 entity.HasIndex(e => e.Id)
                     .HasName("Id_UNIQUE")
@@ -209,7 +209,7 @@ namespace ShareMarket.TradeLog.DataRepository
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.Price).HasColumnType("decimal(6,4)");
+                entity.Property(e => e.Price).HasColumnType("decimal(8,2)");
 
                 entity.HasOne(d => d.SymbolType)
                     .WithMany(p => p.Symbol)

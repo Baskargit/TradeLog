@@ -1,45 +1,97 @@
-<div class="wrapper">
-    <!-- Sidebar Holder -->
-    <nav id="sidebar">
-        <div class="sidebar-header">
-            <h3>TradeLog</h3>
+<div data-role="navview" data-toggle="#paneToggle" data-expand="xl" data-compact="lg" data-active-state="true">
+    <div class="navview-pane">
+        <div class="bg-cyan d-flex flex-align-center">
+            <button class="pull-button m-0 bg-darkCyan-hover">
+                <span class="mif-menu fg-white"></span>
+            </button>
+            <h2 class="text-light m-0 fg-white pl-7" style="line-height: 52px">TradeLog</h2>
         </div>
 
-        <ul class="list-unstyled components">
-            <p>TradeLog</p>
+        <ul class="navview-menu mt-4" id="side-menu">
             <li>
-                <a href="index.html">Home</a>
+                <a href="#dashboard">
+                    <span class="icon"><span class="mif-meter"></span></span>
+                    <span class="caption">Dashboard</span>
+                </a>
             </li>
             <li>
-                <a href="Trades.html">Trades</a>
+                <a href="#widgets">
+                    <span class="icon"><span class="mif-widgets"></span></span>
+                    <span class="caption">Trade</span>
+                </a>
             </li>
             <li>
-                <a href="Symbol.html">Scripts</a>
+                <a href="#market">
+                    <span class="icon"><span class="mif-meter"></span></span>
+                    <span class="caption">Market</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="symbol.html">
+                    <span class="icon"><span class="mif-meter"></span></span>
+                    <span class="caption">Symbol</span>
+                </a>
             </li>
             <li>
-                <a href="SymbolTypes.html">ScriptTypes</a>
+                <a href="#symbolType">
+                    <span class="icon"><span class="mif-meter"></span></span>
+                    <span class="caption">Symbol Types</span>
+                </a>
             </li>
+            
             <li>
-                <a href="Market.html">Market</a>
+                <a href="#about">
+                    <span class="icon"><span class="mif-meter"></span></span>
+                    <span class="caption">About</span>
+                </a>
             </li>
-            <li>
-                <a href="About.html">About</a>
-            </li>              
         </ul>
-    </nav>
 
-    <!-- Page Content Holder -->
-    <div id="content">
-        <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <button type="button" id="sidebarCollapse" class="navbar-btn">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+        <div class="w-100 text-center text-small data-box p-2 border-top bd-grayMouse" style="position: absolute; bottom: 0">
+            <div>&copy; 2019 <a href="mailto:sergey@pimenov.com.ua" class="text-muted fg-white-hover no-decor">Sergey Pimenov</a></div>
+            <div>Created with <a href="https://metroui.org.ua" class="text-muted fg-white-hover no-decor">Metro 4</a></div>
+        </div>
+    </div>
+
+    <div class="navview-content h-100">
+        <div data-role="appbar" class="pos-absolute bg-darkCyan fg-white">
+            <a href="#" class="app-bar-item d-block d-none-lg" id="paneToggle"><span class="mif-menu"></span></a>
+            <div class="app-bar-container ml-auto">
+                <a href="#" class="app-bar-item">
+                    <span class="mif-bell"></span>
+                    <span class="badge bg-orange fg-white mt-2 mr-1">10</span>
+                </a>
+                <div class="app-bar-container">
+                    <a href="#" class="app-bar-item">
+                        <img src="images/jek_vorobey.jpg" class="avatar">
+                        <span class="ml-2 app-bar-name">Jack Sparrow</span>
+                    </a>
+                    <div class="user-block shadow-1" data-role="collapse" data-collapsed="true">
+                        <div class="bg-darkCyan fg-white p-2 text-center">
+                            <img src="images/jek_vorobey.jpg" class="avatar">
+                            <div class="h4 mb-0">Jack Sparrow</div>
+                            <div>Pirate captain</div>
+                        </div>
+                        <div class="bg-white d-flex flex-justify-between flex-equal-items p-2">
+                            <button class="button flat-button">Followers</button>
+                            <button class="button flat-button">Sales</button>
+                            <button class="button flat-button">Friends</button>
+                        </div>
+                        <div class="bg-white d-flex flex-justify-between flex-equal-items p-2 bg-light">
+                            <button class="button mr-1">Profile</button>
+                            <button class="button ml-1">Sign out</button>
+                        </div>
+                    </div>
+                    <a href="#" class="app-bar-item">
+                        <span class="mif-cogs"></span>
+                    </a>
+                </div>
             </div>
-        </nav>
-
-        <dynamicpagecontent></dynamicpagecontent>
+        </div>
+        <div id="content-wrapper" class="content-inner h-100" style="overflow-y: auto">
+            <div class="m-3">
+                <dynamicpagecontent></dynamicpagecontent>
+            </div>
+        </div>
     </div>
 </div>

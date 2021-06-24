@@ -262,6 +262,7 @@ function loadSymbolsUi()
     });
 }
 
+
 // Tracker variables
 var DATA_OP = -1; // 'C' => Create an entity , 'U' => Update an entity
 
@@ -273,6 +274,8 @@ var symbolModalId = "symbolModal";
 var dataTable = {};
 var symbolTypes = null;
 
-getAllSymbolTypes();
-loadSymbolsUi();
-
+$(document).ready(function () 
+{
+    getAllSymbolTypes();
+    loadSymbolsUi();
+});
