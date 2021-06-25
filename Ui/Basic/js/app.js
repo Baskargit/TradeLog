@@ -75,8 +75,29 @@ function initializeNotificationDefaults()
 
 function initializePromptDefaults()
 {
-    alertify.defaults['theme'].ok = 'ajs-ok btn btn-danger';
-    alertify.defaults['theme'].cancel = 'ajs-cancel btn btn-success';
+    alertify.defaults['theme'].ok = 'ajs-ok button alert';
+    alertify.defaults['theme'].cancel = 'ajs-cancel button primary';
+}
+
+// Global DOM Helper Functions
+function UpdateView(data,elementSelector) 
+{
+    if (elementSelector)
+    {
+        // Bind viewModel data to view
+        var elementToBind = $(elementSelector);
+        var existingContext = ko.contextFor(elementToBind[0]);
+        if (existingContext && ko.isObservable(existingContext.$rawData)) 
+        {
+            // update observable with new view model
+            existingContext.$rawData(data);
+        } 
+        else 
+        {
+            // initialize with new observable view model
+            ko.applyBindings(ko.observable(data), elementToBind[0]);
+        }
+    }
 }
 
 // Global helper functions
@@ -150,6 +171,41 @@ function createDeletePrompt(title,message,onOkHandler,onCancelHandler)
 
     prompt.show();
 }
+
+function createModalPrompt(title,modalContent,onSaveHandler,onCancelHandler)
+{
+    var prompt = alertify.confirm();
+
+    prompt.set({
+        transition:'zoom',
+        overflow: false,
+        movable: false,
+        resizable: false,
+        closable:true,
+        pinnable:false,
+        pinned:false,
+        labels: {
+            ok:'Save', cancel:'Cancel'
+        },
+        title: title,
+        message: modalContent,
+        onok: onSaveHandler,
+        oncancel: onCancelHandler
+    });
+
+    prompt.show();
+}
+
+function activeSideMenu(id)
+{
+    var element = $("ul#side-menu #" + id);
+
+    if (element.length > 0)
+    {
+        element.addClass("active");
+    } 
+}
+
 
 // Assign constants
 const NOTIFICATION_TYPE = Object.freeze({"SUCCESS" : 0, "ERROR" : 1, "WARNING" : 2, "INFO" : 3});

@@ -43,23 +43,6 @@ function getSymbolTypeById(symbolTypeId)
 }
 
 // DOM Functions
-function UpdateView(data) 
-{
-    // Bind viewModel data to view
-    var elementToBind = document.getElementById(symbolModalId);
-    var existingContext = ko.contextFor(elementToBind);
-    if (existingContext && ko.isObservable(existingContext.$rawData)) 
-    {
-        // update observable with new view model
-        existingContext.$rawData(data);
-    } 
-    else 
-    {
-        // initialize with new observable view model
-        ko.applyBindings(ko.observable(data), elementToBind);
-    }
-}
-
 function GetViewData() 
 {
     var existingContext = ko.contextFor(document.getElementById(symbolModalId));
@@ -78,8 +61,9 @@ function UpdateDataGrid(symbols)
         // Initialize table
         dataTable = $('#symbol_table').DataTable({
             "columns": [
-                {"data": "s.no",
-                    render: function (data, type, row, meta) 
+                {
+                    "data": "s.no",
+                    "render": function (data, type, row, meta) 
                     {
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
@@ -91,7 +75,7 @@ function UpdateDataGrid(symbols)
                     "data": null,
                     "sortable": false,
                     "mRender": function(data, type, full) {
-                        var editElement = '<button data-toggle="modal" data-target="#symbolModal" class="editRow btn" data-id="' + data.id + '"><i class="fa fa-info-circle fa-lg" aria-hidden="true" style="color:#1d63bf;"></i></button>';
+                        var editElement = '<button class="editRow btn" data-id="' + data.id + '"><i class="fa fa-info-circle fa-lg" aria-hidden="true" style="color:#1d63bf;"></i></button>';
                         var deleteElement = '<button class="deleteRow btn" data-id="' + data.id + '"><i class="fa fa-trash" aria-hidden="true" style="color:#b52121;"></i></button>';
                         return editElement + deleteElement;
                     },
@@ -118,13 +102,14 @@ $(document).on("click",".editRow", function ()
     // Get id from the click item
     var id = $(this).attr('data-id');
 
+    createModalPrompt("Update Symbol",$("#" + symbolModalId).html());
+
     // Get symbol object from the symbols variable
     var promise = getSymbolById(id);
     promise.done(symbol => 
     {
-        //symbol['symbolTypes'] = getSymbolTypeById(symbol.symbolTypeId);
         symbol['symbolTypes'] = symbolTypes;
-        UpdateView(symbol);
+        UpdateView(symbol,".ajs-dialog");
     });
  });
 
@@ -156,6 +141,9 @@ $(document).on("click",".deleteRow", function ()
  $(document).on("click","#createNewSymbol", function () 
  {
     DATA_OP = DATA_OPERATION.CREATE;
+
+    createModalPrompt("Create new Symbol",$("#" + symbolModalId).html());
+
     UpdateView({ 
         id:null, 
         name: null, 
@@ -163,10 +151,46 @@ $(document).on("click",".deleteRow", function ()
         price: null, 
         symbolTypeId: null,
         symbolTypes: ko.observableArray(symbolTypes) 
-    });
+    },symbolModalId);
 });
 
 $(document).on("click","#saveModal", function () 
+{
+    saveSymbol();
+});
+
+// Helper functions
+function GetSymbolModel(symbolObject) 
+{
+    return (symbolObject != null)
+    ?   { 
+            id: ($.isNumeric(symbolObject.id)) ? parseInt(symbolObject.id) : 0, 
+            name: symbolObject.name, 
+            code: symbolObject.code, 
+            price: ($.isNumeric(symbolObject.price)) ? parseFloat(symbolObject.price) : 0.0,
+            symbolTypeId:  ($.isNumeric(symbolObject.symbolTypeId)) ? parseInt(symbolObject.symbolTypeId) : 0
+        }
+    : null;
+}
+
+function getParentRowById(id)
+{
+    var tr = $('table tr .editRow[data-id="' + id + '"]');
+
+    if (tr.length > 0) 
+    {
+        return tr[0].parentElement.parentElement;
+    }
+
+    return null;
+}
+
+function getParentRowByS_No(id)
+{
+
+}
+
+function saveSymbol()
 {
     toggleButton('#saveModal');
 
@@ -208,38 +232,6 @@ $(document).on("click","#saveModal", function ()
         toggleButton('#saveModal');
         closeModal('#' + symbolModalId);
     });
-
-});
-
-// Helper functions
-function GetSymbolModel(symbolObject) 
-{
-    return (symbolObject != null)
-    ?   { 
-            id: ($.isNumeric(symbolObject.id)) ? parseInt(symbolObject.id) : 0, 
-            name: symbolObject.name, 
-            code: symbolObject.code, 
-            price: ($.isNumeric(symbolObject.price)) ? parseFloat(symbolObject.price) : 0.0,
-            symbolTypeId:  ($.isNumeric(symbolObject.symbolTypeId)) ? parseInt(symbolObject.symbolTypeId) : 0
-        }
-    : null;
-}
-
-function getParentRowById(id)
-{
-    var tr = $('table tr .editRow[data-id="' + id + '"]');
-
-    if (tr.length > 0) 
-    {
-        return tr[0].parentElement.parentElement;
-    }
-
-    return null;
-}
-
-function getParentRowByS_No(id)
-{
-
 }
 
 function loadSymbolsUi() 
@@ -252,11 +244,13 @@ function loadSymbolsUi()
     .then(data => 
     {
         // assign symbol template
-        document.querySelector(dynamicpagecontentKey).innerHTML = data;
+        symbolTemplateContent = data;
 
         // Fetch symbols and Update UI
         var promise = getSymbols();
         promise.done(symbols => {
+            $(dynamicpagecontentKey).html(symbolTemplateContent);
+            activeSideMenu("symbol");
             UpdateDataGrid(symbols);
         });
     });
@@ -271,6 +265,7 @@ var symbolTemplatePath = "templates/symbol/symbol.template.html";
 var symbolsApiEndpoint = "Symbol";
 var symbolTypeApiEndpoint = "SymbolType";
 var symbolModalId = "symbolModal";
+var symbolTemplateContent = null;
 var dataTable = {};
 var symbolTypes = null;
 
