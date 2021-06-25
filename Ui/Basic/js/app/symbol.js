@@ -45,12 +45,17 @@ function getSymbolTypeById(symbolTypeId)
 // DOM Functions
 function GetViewData() 
 {
-    var existingContext = ko.contextFor(document.getElementById(symbolModalId));
-    if (existingContext && ko.isObservable(existingContext.$rawData)) 
-    {
-        return existingContext.$rawData();
-    }
+    var element = $(VIEW_MODEL_CONTAINER_SELECTOR);
 
+    if (element && element.length > 0) 
+    {
+        var existingContext = ko.contextFor(element[0]);
+        if (existingContext && ko.isObservable(existingContext.$rawData)) 
+        {
+            return existingContext.$rawData();
+        }
+    }
+    
     return null;
 }
 
@@ -75,8 +80,8 @@ function UpdateDataGrid(symbols)
                     "data": null,
                     "sortable": false,
                     "mRender": function(data, type, full) {
-                        var editElement = '<button class="editRow btn" data-id="' + data.id + '"><i class="fa fa-info-circle fa-lg" aria-hidden="true" style="color:#1d63bf;"></i></button>';
-                        var deleteElement = '<button class="deleteRow btn" data-id="' + data.id + '"><i class="fa fa-trash" aria-hidden="true" style="color:#b52121;"></i></button>';
+                        var editElement = '<button class="editRow button" data-id="' + data.id + '"><i class="fa fa-info-circle fa-lg" aria-hidden="true" style="color:#1d63bf;"></i></button>';
+                        var deleteElement = '<button class="deleteRow button" data-id="' + data.id + '"><i class="fa fa-trash" aria-hidden="true" style="color:#b52121;"></i></button>';
                         return editElement + deleteElement;
                     },
                     
@@ -102,14 +107,14 @@ $(document).on("click",".editRow", function ()
     // Get id from the click item
     var id = $(this).attr('data-id');
 
-    createModalPrompt("Update Symbol",$("#" + symbolModalId).html());
+    createModalPrompt("Update Symbol",$("#" + symbolModalId).html(),saveSymbol);
 
     // Get symbol object from the symbols variable
     var promise = getSymbolById(id);
     promise.done(symbol => 
     {
         symbol['symbolTypes'] = symbolTypes;
-        UpdateView(symbol,".ajs-dialog");
+        UpdateView(symbol,VIEW_MODEL_CONTAINER_SELECTOR);
     });
  });
 
@@ -140,10 +145,13 @@ $(document).on("click",".deleteRow", function ()
 
  $(document).on("click","#createNewSymbol", function () 
  {
+    // Set OP_Code
     DATA_OP = DATA_OPERATION.CREATE;
 
+    // Show Modal Pop-up
     createModalPrompt("Create new Symbol",$("#" + symbolModalId).html());
 
+    // Update View for the loaded pop-up
     UpdateView({ 
         id:null, 
         name: null, 
@@ -154,10 +162,6 @@ $(document).on("click",".deleteRow", function ()
     },symbolModalId);
 });
 
-$(document).on("click","#saveModal", function () 
-{
-    saveSymbol();
-});
 
 // Helper functions
 function GetSymbolModel(symbolObject) 
@@ -192,12 +196,9 @@ function getParentRowByS_No(id)
 
 function saveSymbol()
 {
-    toggleButton('#saveModal');
-
     // Get data
     var viewData = GetViewData();
-    console.log(viewData);
-
+    
     var promise = (DATA_OP == DATA_OPERATION.CREATE) ? createSymbol(viewData) : updateSymbol(viewData);
     promise.done(x => 
     {
@@ -229,8 +230,7 @@ function saveSymbol()
         console.log(responseObject);
     }).always(x => 
     {
-        toggleButton('#saveModal');
-        closeModal('#' + symbolModalId);
+        
     });
 }
 

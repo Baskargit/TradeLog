@@ -210,12 +210,15 @@ function activeSideMenu(id)
 // Assign constants
 const NOTIFICATION_TYPE = Object.freeze({"SUCCESS" : 0, "ERROR" : 1, "WARNING" : 2, "INFO" : 3});
 const DATA_OPERATION = Object.freeze({ "CREATE" : 0, "READ" : 1, "UPDATE" : 2, "DELETE" : 3 });
+const VIEW_MODEL_CONTAINER_SELECTOR = '.ajs-dialog';
+const SAVE_MODEL_BUTTON_SELECTOR = '.ajs-dialog .ajs-footer button.ajs-ok';
+const CANCEL_MODEL_BUTTON_SELECTOR = '.ajs-dialog .ajs-footer button.ajs-cancel';
 const host = "http://localhost:5000/";
 const dynamicpagecontentKey = "dynamicpagecontent";
 
-// Set scrollbar color
+
 $(document).ready(function () {
-    $("html").attr('class','scrollbar-type-1 sb-cyan');
+    $("html").attr('class','scrollbar-type-1 sb-cyan'); // Set scrollbar color
     loadHeader();
     initializeNotificationDefaults();
     initializePromptDefaults();
