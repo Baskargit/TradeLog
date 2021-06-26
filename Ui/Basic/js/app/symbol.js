@@ -149,7 +149,7 @@ $(document).on("click",".deleteRow", function ()
     DATA_OP = DATA_OPERATION.CREATE;
 
     // Show Modal Pop-up
-    createModalPrompt("Create new Symbol",$("#" + symbolModalId).html());
+    createModalPrompt("Create new Symbol",$("#" + symbolModalId).html(),saveSymbol);
 
     // Update View for the loaded pop-up
     UpdateView({ 
@@ -159,7 +159,7 @@ $(document).on("click",".deleteRow", function ()
         price: null, 
         symbolTypeId: null,
         symbolTypes: ko.observableArray(symbolTypes) 
-    },symbolModalId);
+    },VIEW_MODEL_CONTAINER_SELECTOR);
 });
 
 
@@ -204,12 +204,13 @@ function saveSymbol()
     {
         if (DATA_OP == DATA_OPERATION.CREATE) 
         {
+            // Add new row
             dataTable.row.add(x);
             createNotification(viewData.name + " created successfully",NOTIFICATION_TYPE.SUCCESS);
         }
         else 
         {
-            // Get he parent row
+            // Get he parent row and update the data
             var parentRow = getParentRowById(x.id);
             dataTable.row(parentRow).data(x).invalidate();
             createNotification(viewData.name + " updated successfully",NOTIFICATION_TYPE.SUCCESS);

@@ -21,61 +21,26 @@
     </div>
 </div>
 
-
-
-<div class="dialog" data-role="dialog">
-    <div class="dialog-title">Title</div>
-    <div class="dialog-content">
-        <form id="symbolModal">
-            <div class="form-group">
-                <!-- <label for="name" class="col-form-label">Name:</label> -->
-                <input type="text" id="name" data-bind='textInput: name' data-role="materialinput"
-                    data-label="Name"
-                    placeholder="Eg: Yes Bank Ltd">
-                <!-- <input data-bind='textInput: name' type="text" class="form-control" id="name" placeholder="Yes Bank Ltd"> -->
-            </div>
-            <div class="form-group">
-                <!-- <label for="code" class="col-form-label">Code:</label>
-                <input data-bind='textInput: code' type="text" class="form-control" id="code" placeholder="YESBANK-BE"> -->
-                <input type="text" data-bind='textInput: code' data-role="materialinput"
-                    data-label="Code"
-                    placeholder="Eg: YESBANK-BE">
-            </div>
-            <div class="form-group">
-                <!-- <label for="price" class="col-form-label">Price:</label>
-                <input data-bind='textInput: price' type="number" class="form-control" id="price" placeholder="21.06"> -->
-                <input type="number" data-bind='textInput: price' data-role="materialinput"
-                    data-label="Price"
-                    placeholder="Eg: 93.5">
-            </div>
-            <div class="form-group">
-                <!-- <label for="symbolTypeLabel" class="col-form-label">SymbolType:</label>
-                <div id="symbolTypeLabel">
-                    <select name="symbol" id="symbolType" data-bind="
-                        options: symbolTypes,
-                        optionsText: 'name',
-                        optionsValue: 'id',
-                        value: symbolTypeId
-                    ">    
-                    </select>
-                </div> -->
-                <select data-bind=" options: symbolTypes,
-                        optionsText: 'name',
-                        optionsValue: 'id',
-                        value: symbolTypeId
-                    ">
-                </select>
-            </div>
-        </form> 
-    </div>
-    <div class="dialog-actions">
-        <button class="button js-dialog-close">Disagree</button>
-        <button class="button primary js-dialog-close">Agree</button>
-    </div>
+<div hidden>
+    <form id="symbolModal">
+        <input type="text" id="name" data-bind='textInput: name' data-role="materialinput"
+                data-label="Name"
+                placeholder="Eg: Yes Bank Ltd">
+        <input type="text" data-bind='textInput: code' data-role="materialinput"
+            data-label="Code"
+            placeholder="Eg: YESBANK-BE">
+        <input type="number" data-bind='textInput: price' data-role="materialinput"
+            data-label="Price"
+            placeholder="Eg: 93.5">
+        <select data-bind=" options: symbolTypes,
+            optionsText: 'name',
+            optionsValue: 'id',
+            value: symbolTypeId">
+        </select>
+    </form> 
 </div>
 
 <div class="addData text-center">
-    <button id="createNewSymbol" class="button success"> + Add</button>
-    <!-- <button class="button primary" onclick="Metro.dialog.open('#symbolModal')">Open dialog</button> -->
+    <button id="createNewSymbol" class="button success">+ Add</button>
 </div>
 
