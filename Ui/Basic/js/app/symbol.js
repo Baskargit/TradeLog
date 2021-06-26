@@ -1,46 +1,39 @@
 // Api functions
 function getSymbols() 
 {
-    return get(symbolsApiEndpoint);
+    return get(SYMBOL_API_URL);
 }
 
 function getSymbolById(id)
 {
-    return get(symbolsApiEndpoint + "/" + id);
+    return get(SYMBOL_API_URL + "/" + id);
 }
 
 function createSymbol(newSymbol) 
 {
-    return create(symbolsApiEndpoint,GetSymbolModel(newSymbol));
+    return create(SYMBOL_API_URL,GetSymbolModel(newSymbol));
 }
 
 function updateSymbol(symbol)
 {
-    return update((symbol != null) ? symbolsApiEndpoint + "/" + symbol.id : symbolsApiEndpoint,GetSymbolModel(symbol));
+    return update((symbol != null) ? SYMBOL_API_URL + "/" + symbol.id : SYMBOL_API_URL,GetSymbolModel(symbol));
 }
 
 function removeSymbol(id)
 {
-    return remove(symbolsApiEndpoint + "/" + id);
+    return remove(SYMBOL_API_URL + "/" + id);
 }
 
 function getAllSymbolTypes() 
 {
-    get(symbolTypeApiEndpoint).done(data => { symbolTypes = data; });
+    get(SYMBOL_TYPES_API_URL).done(data => { symbolTypes = data; });
 }
 
-function getSymbolTypeById(symbolTypeId)
+function getAllMarkets() 
 {
-    if (symbolTypeId && symbolTypes && symbolTypes.length > 0)
-    {
-        var symbolType = symbolTypes.filter(function(x) 
-        { 
-            return x.id == symbolTypeId;
-        });
-
-        return symbolType;
-    }
+    get(MARKET_API_URL).done(data => { markets = data; });
 }
+
 
 // DOM Functions
 function GetViewData() 
@@ -59,7 +52,7 @@ function GetViewData()
     return null;
 }
 
-function UpdateDataGrid(symbols)
+function UpdateDataTable(symbols=null)
 {
     if (symbols != null) 
     {
@@ -71,11 +64,12 @@ function UpdateDataGrid(symbols)
                     "render": function (data, type, row, meta) 
                     {
                         return meta.row + meta.settings._iDisplayStart + 1;
-                    }
+                    },
+                    "width": '10%'
                 },
                 {"data": "name"},
                 {"data": "code"},
-                {"data": "price"},
+                {"data": "price" , "width": '10%'},
                 {
                     "data": null,
                     "sortable": false,
@@ -84,7 +78,7 @@ function UpdateDataGrid(symbols)
                         var deleteElement = '<button class="deleteRow button" data-id="' + data.id + '"><i class="fa fa-trash" aria-hidden="true" style="color:#b52121;"></i></button>';
                         return editElement + deleteElement;
                     },
-                    
+                    "width": '10%'
                 },
                 {
                     "data": "id",
@@ -95,13 +89,15 @@ function UpdateDataGrid(symbols)
         });
         
         dataTable.rows.add(symbols);
-        dataTable.draw();    
     }
+
+    dataTable.draw();
 }
 
 // Data Action functions
 $(document).on("click",".editRow", function () 
 {
+    // Set OP_Code
     DATA_OP = DATA_OPERATION.UPDATE;
 
     // Get id from the click item
@@ -123,6 +119,7 @@ $(document).on("click",".deleteRow", function ()
     // Get id from the clicked item
     var id = $(this).attr('data-id');
 
+    // Get parent row from table
     var parentRow = getParentRowById(id);
     var parentRowData = dataTable.row($(parentRow)).data();
 
@@ -139,8 +136,6 @@ $(document).on("click",".deleteRow", function ()
             createNotification(parentRowData.name + " deletion failed",NOTIFICATION_TYPE.ERROR);
         });
     },null);
-
-    getSymbols();
  });
 
  $(document).on("click","#createNewSymbol", function () 
@@ -164,6 +159,19 @@ $(document).on("click",".deleteRow", function ()
 
 
 // Helper functions
+function getSymbolTypeById(symbolTypeId)
+{
+    if (symbolTypeId && symbolTypes && symbolTypes.length > 0)
+    {
+        var symbolType = symbolTypes.filter(function(x) 
+        { 
+            return x.id == symbolTypeId;
+        });
+
+        return symbolType;
+    }
+}
+
 function GetSymbolModel(symbolObject) 
 {
     return (symbolObject != null)
@@ -205,19 +213,26 @@ function saveSymbol()
         if (DATA_OP == DATA_OPERATION.CREATE) 
         {
             // Add new row
-            dataTable.row.add(x);
+            if (dataViewType == DATA_VIEW_TYPE.TABLE) { dataTable.row.add(x); }
+            if (dataViewType == DATA_VIEW_TYPE.CARD) {  }
             createNotification(viewData.name + " created successfully",NOTIFICATION_TYPE.SUCCESS);
         }
         else 
         {
             // Get he parent row and update the data
-            var parentRow = getParentRowById(x.id);
-            dataTable.row(parentRow).data(x).invalidate();
+            if (dataViewType == DATA_VIEW_TYPE.TABLE) {  
+                var parentRow = getParentRowById(x.id);
+                dataTable.row(parentRow).data(x).invalidate();
+            }
+            
+            if (dataViewType == DATA_VIEW_TYPE.CARD) {  
+                //UpdateView(x,cardModelInfoSelector);
+            }
             createNotification(viewData.name + " updated successfully",NOTIFICATION_TYPE.SUCCESS);
         }
 
         // Update datatable ui
-        dataTable.draw();
+        if (dataViewType == DATA_VIEW_TYPE.TABLE) { dataTable.draw(); }
     }).fail((responseObject) => 
     {
         if (DATA_OP == DATA_OPERATION.CREATE) 
@@ -235,10 +250,10 @@ function saveSymbol()
     });
 }
 
-function loadSymbolsUi() 
+function loadSymbolsUi(viewType = 0) 
 {
     // Fetch table template
-    fetch(symbolTemplatePath)
+    fetch((viewType == DATA_VIEW_TYPE.TABLE) ? symbolTableTemplatePath : symbolCardTemplatePath)
     .then(response => {
         return response.text()
     })
@@ -252,7 +267,16 @@ function loadSymbolsUi()
         promise.done(symbols => {
             $(dynamicpagecontentKey).html(symbolTemplateContent);
             activeSideMenu("symbol");
-            UpdateDataGrid(symbols);
+
+            if (viewType == DATA_VIEW_TYPE.TABLE) {
+                UpdateDataTable(symbols);
+            } else {
+                UpdateView({
+                    symbol: symbols,
+                    symbolTypes: symbolTypes,
+                    market: markets,
+                },$(cardModelInfoSelector));
+            }
         });
     });
 }
@@ -262,16 +286,19 @@ function loadSymbolsUi()
 var DATA_OP = -1; // 'C' => Create an entity , 'U' => Update an entity
 
 // Assign constants
-var symbolTemplatePath = "templates/symbol/symbol.template.html";
-var symbolsApiEndpoint = "Symbol";
-var symbolTypeApiEndpoint = "SymbolType";
+var symbolTableTemplatePath = "templates/symbol/symbol.table.template.html";
+var symbolCardTemplatePath = "templates/symbol/symbol.card.template.html";
 var symbolModalId = "symbolModal";
 var symbolTemplateContent = null;
 var dataTable = {};
 var symbolTypes = null;
+var markets = null;
+var dataViewType = DATA_VIEW_TYPE.CARD;
+var cardModelInfoSelector = "#card-model-info";
 
 $(document).ready(function () 
 {
     getAllSymbolTypes();
-    loadSymbolsUi();
+    getAllMarkets();
+    loadSymbolsUi(dataViewType);    
 });

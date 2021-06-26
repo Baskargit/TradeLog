@@ -1,5 +1,6 @@
 body {
   background-color: #ECF0F5;
+  min-width: 400px;
 }
 .navview .navview-pane {
   background-color: #222D32;
@@ -107,4 +108,18 @@ body {
   .app-bar-name {
     display: inline;
   }
+}
+
+
+/* Card styling */
+.custom-card .icon-box {
+  height: auto;
+}
+
+.custom-card .icon-box .icon { 
+  height: inherit;
+}
+
+.custom-card .icon-box button {
+  pointer-events: none;
 }

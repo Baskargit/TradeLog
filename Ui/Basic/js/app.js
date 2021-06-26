@@ -17,7 +17,7 @@ function loadHeader()
 function get(url)
 {
     return $.ajax({
-        url: host + url,
+        url: url,
         type: 'GET',
         contentType: 'application/json',
    });
@@ -26,7 +26,7 @@ function get(url)
 function create(url,data) 
 {
     return $.ajax({
-        url: host + url,
+        url: url,
         type: 'POST',
         dataType: 'json',
         contentType: 'application/json',
@@ -37,7 +37,7 @@ function create(url,data)
 function update(url,data) 
 {
     return $.ajax({
-        url: host + url,
+        url: url,
         type: 'PUT',
         dataType: 'json',
         contentType: 'application/json',
@@ -48,7 +48,7 @@ function update(url,data)
 function remove(url)
 {
     return $.ajax({
-        url: host + url,
+        url: url,
         type: 'DELETE',
         contentType: 'application/json',
    });
@@ -117,14 +117,6 @@ function toggleButton(buttonSelector)
         {
             $(button[0]).prop('disabled',true);
         }
-    }
-}
-
-function closeModal(modalSelector)
-{
-    if ($(modalSelector).length > 0)
-    {
-        $(modalSelector).modal('hide');    
     }
 }
 
@@ -207,15 +199,24 @@ function activeSideMenu(id)
 }
 
 
-// Assign constants
+// Application constants
+const DATA_VIEW_TYPE = Object.freeze({"TABLE": 0, "CARD": 1});
 const NOTIFICATION_TYPE = Object.freeze({"SUCCESS" : 0, "ERROR" : 1, "WARNING" : 2, "INFO" : 3});
 const DATA_OPERATION = Object.freeze({ "CREATE" : 0, "READ" : 1, "UPDATE" : 2, "DELETE" : 3 });
+
+
+// Endpoint constants
+const HOST = "http://localhost:5000/";
+const SYMBOL_API_URL = HOST + "Symbol";
+const SYMBOL_TYPES_API_URL = HOST + "SymbolType"
+const MARKET_API_URL = HOST + "Market";
+
+
+// DOM constants
 const VIEW_MODEL_CONTAINER_SELECTOR = '.ajs-dialog';
 const SAVE_MODEL_BUTTON_SELECTOR = '.ajs-dialog .ajs-footer button.ajs-ok';
 const CANCEL_MODEL_BUTTON_SELECTOR = '.ajs-dialog .ajs-footer button.ajs-cancel';
-const host = "http://localhost:5000/";
 const dynamicpagecontentKey = "dynamicpagecontent";
-
 
 $(document).ready(function () {
     $("html").attr('class','scrollbar-type-1 sb-cyan'); // Set scrollbar color

@@ -21,25 +21,6 @@
     </div>
 </div>
 
-<div hidden>
-    <form id="symbolModal">
-        <input type="text" id="name" data-bind='textInput: name' data-role="materialinput"
-                data-label="Name"
-                placeholder="Eg: Yes Bank Ltd">
-        <input type="text" data-bind='textInput: code' data-role="materialinput"
-            data-label="Code"
-            placeholder="Eg: YESBANK-BE">
-        <input type="number" data-bind='textInput: price' data-role="materialinput"
-            data-label="Price"
-            placeholder="Eg: 93.5">
-        <select data-bind=" options: symbolTypes,
-            optionsText: 'name',
-            optionsValue: 'id',
-            value: symbolTypeId">
-        </select>
-    </form> 
-</div>
-
 <div class="addData text-center">
     <button id="createNewSymbol" class="button success">+ Add</button>
 </div>

@@ -22,6 +22,24 @@
 <body class="m4-cloak h-vh-100">
     <header></header>
     <footer></footer>
+    <div hidden>
+        <form id="symbolModal">
+            <input type="text" data-bind='textInput: name' data-role="materialinput"
+                    data-label="Name"
+                    placeholder="Eg: Yes Bank Ltd">
+            <input type="text" data-bind='textInput: code' data-role="materialinput"
+                data-label="Code"
+                placeholder="Eg: YESBANK-BE">
+            <input type="number" data-bind='textInput: price' data-role="materialinput"
+                data-label="Price"
+                placeholder="Eg: 93.5">
+            <select data-bind=" options: symbolTypes,
+                optionsText: 'name',
+                optionsValue: 'id',
+                value: symbolTypeId">
+            </select>
+        </form> 
+    </div>
     <script src="js/app.js"></script>
     <script src="js/app/symbol.js"></script>
 </body>
